@@ -1,11 +1,49 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 // Custom imports:
 import logo from './assets/logo.png';
 
 export default function App() {
+  // Local state to capture user's selected image
+  const [selectedImage, setSelectedImage] = React.useState(null);
+
+  // Use Expo image picker to open user's local photos on phone when button is pressed
+  let openImagePickerAsync = async () => {
+    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+
+    // If no image selected then stop running this function
+    if (pickerResult.cancelled === true) {
+      return;
+    }
+
+    // If an image is selected, capture the uri in local state
+    setSelectedImage({ localUri: pickerResult.uri });
+    // console.log(pickerResult);
+  }
+
+  // Display selected image:
+  if (selectedImage !== null) {
+    return (
+      <View style={styles.container}>
+        <Image
+          source={{ uri: selectedImage.localUri }}
+          style={styles.thumbnail}
+        />
+      </View>
+    );
+  }
+
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.baseText}>Press the button below to share a photo from your phone with a friend!</Text>
@@ -14,7 +52,7 @@ export default function App() {
         style={styles.logo} />
 
       <TouchableOpacity
-        onPress={() => alert('Select a photo!')}
+        onPress={openImagePickerAsync}
         style={styles.buttonBg}>
         <Text style={styles.button}>Pick a photo</Text>
       </TouchableOpacity>
@@ -53,5 +91,10 @@ const styles = StyleSheet.create({
     height: 159,
     margin: 20,
     borderRadius: 5,
+  },
+  thumbnail: {
+    width: 300,
+    height: 300,
+    resizeMode: "contain"
   }
 });
