@@ -11,7 +11,7 @@ import logo from './assets/logo.png';
 
 // Keep Splash screen on page for 5 seconds when app loads:
 SplashScreen.preventAutoHideAsync();
-setTimeout(SplashScreen.hideAsync, 5000);
+setTimeout(SplashScreen.hideAsync, 3000);
 
 
 export default function App() {
