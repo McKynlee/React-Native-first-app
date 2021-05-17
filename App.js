@@ -9,11 +9,12 @@ import * as SplashScreen from 'expo-splash-screen';
 // Custom imports:
 import logo from './assets/logo.png';
 
-export default function App() {
-  // Keep Splash screen on page for 5 seconds when app loads:
-  SplashScreen.preventAutoHideAsync();
-  setTimeout(SplashScreen.hideAsync, 5000);
+// Keep Splash screen on page for 5 seconds when app loads:
+SplashScreen.preventAutoHideAsync();
+setTimeout(SplashScreen.hideAsync, 5000);
 
+
+export default function App() {
   // Local state to capture user's selected image
   const [selectedImage, setSelectedImage] = React.useState(null);
 
