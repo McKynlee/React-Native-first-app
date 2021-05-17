@@ -2,11 +2,18 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import * as Sharing from 'expo-sharing';
+import uploadToAnonymousFilesAsync from 'anonymous-files';
+import * as SplashScreen from 'expo-splash-screen';
 
 // Custom imports:
 import logo from './assets/logo.png';
 
 export default function App() {
+  // Keep Splash screen on page for 5 seconds when app loads:
+  SplashScreen.preventAutoHideAsync();
+  setTimeout(SplashScreen.hideAsync, 5000);
+
   // Local state to capture user's selected image
   const [selectedImage, setSelectedImage] = React.useState(null);
 
@@ -26,9 +33,24 @@ export default function App() {
     }
 
     // If an image is selected, capture the uri in local state
-    setSelectedImage({ localUri: pickerResult.uri });
-    // console.log(pickerResult);
+    // Account for Chrome not being supported by Expo to share files, and send URI instead
+    if (Platform.OS === 'web') {
+      let remoteUri = await uploadToAnonymousFilesAsync(pickerResult.uri);
+      setSelectedImage({ localUri: pickerResult.uri, remoteUri });
+    } else {
+      setSelectedImage({ localUri: pickerResult.uri, remoteUri: null });
+    }
   }
+
+
+  let openShareDialogAsync = async () => {
+    if (!(await Sharing.isAvailableAsync())) {
+      alert(`The image is available for sharing at: ${selectedImage.remoteUri}`);
+      return;
+    }
+
+    await Sharing.shareAsync(selectedImage.localUri);
+  };
 
   // Display selected image:
   if (selectedImage !== null) {
@@ -38,6 +60,9 @@ export default function App() {
           source={{ uri: selectedImage.localUri }}
           style={styles.thumbnail}
         />
+        <TouchableOpacity onPress={openShareDialogAsync} style={styles.buttonBg}>
+          <Text style={styles.button}>Share this photo</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -95,6 +120,7 @@ const styles = StyleSheet.create({
   thumbnail: {
     width: 300,
     height: 300,
-    resizeMode: "contain"
+    resizeMode: "contain",
+    borderRadius: 5,
   }
 });
