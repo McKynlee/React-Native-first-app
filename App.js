@@ -62,7 +62,11 @@ export default function App() {
           style={styles.thumbnail}
         />
         <TouchableOpacity onPress={openShareDialogAsync} style={styles.buttonBg}>
-          <Text style={styles.button}>Share this photo</Text>
+          <Text style={styles.buttonText}>Share this photo</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => setSelectedImage(null)} style={styles.buttonBg}>
+          <Text style={styles.buttonText}>Clear Selection</Text>
         </TouchableOpacity>
       </View>
     );
@@ -80,7 +84,7 @@ export default function App() {
       <TouchableOpacity
         onPress={openImagePickerAsync}
         style={styles.buttonBg}>
-        <Text style={styles.button}>Pick a photo</Text>
+        <Text style={styles.buttonText}>Pick a photo</Text>
       </TouchableOpacity>
 
       <StatusBar style="auto" />
@@ -96,7 +100,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
   },
-  button: {
+  buttonText: {
     fontSize: 20,
     color: '#eec4c4'
   },
@@ -104,6 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#7b6079',
     padding: 20,
     borderRadius: 5,
+    margin: 20,
   },
   container: {
     flex: 1,
