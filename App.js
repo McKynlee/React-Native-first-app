@@ -9,7 +9,7 @@ import * as SplashScreen from 'expo-splash-screen';
 // Custom imports:
 import logo from './assets/logo.png';
 
-// Keep Splash screen on page for 5 seconds when app loads:
+// Keep Splash screen on page for 3 seconds when app loads:
 SplashScreen.preventAutoHideAsync();
 setTimeout(SplashScreen.hideAsync, 3000);
 
