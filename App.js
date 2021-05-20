@@ -115,12 +115,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#eec4c4',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: 60,
     padding: 20,
   },
   logo: {
     width: 300,
     height: 159,
-    margin: 20,
+    margin: 10,
     borderRadius: 5,
   },
   thumbnail: {
